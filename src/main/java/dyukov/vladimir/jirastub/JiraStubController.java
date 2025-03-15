@@ -22,8 +22,8 @@ public class JiraStubController {
     @PostMapping
     public ResponseEntity<String> createIssue(@RequestBody @Validated(JiraStubDTO.Create.class) JiraStubDTO request) {
         long id = idCounter.getAndIncrement();
-        String response = String.format("{\"id\": \"%d\",\"key\":\"TEST-%d\",\"self\":\"http://localhost/rest/api/2/issue/%d\"", id, id, id);
-        String issue = response + "," + request + "}";
+        String response = String.format("{\"id\":\"%d\",\"key\":\"TEST-%d\",\"self\":\"http://localhost/rest/api/2/issue/%d\"", id, id, id);
+        String issue = response + ",\"parsed_request\":" + request + "}";
         issues.put(id, issue);
         return ResponseEntity.status(HttpStatus.CREATED).headers(localHeaders).body(response + "}");
     }

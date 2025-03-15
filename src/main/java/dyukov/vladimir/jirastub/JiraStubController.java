@@ -1,5 +1,7 @@
 package dyukov.vladimir.jirastub;
 
+import dyukov.vladimir.jirastub.dto.JiraStubIssue;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +22,12 @@ public class JiraStubController {
     private final HttpHeaders localHeaders = new JiraStubHeaders();
 
     @PostMapping
-    public ResponseEntity<String> createIssue(@RequestBody @Validated(JiraStubDTO.Create.class) JiraStubDTO request) {
+    public ResponseEntity<String> createIssue(@RequestBody @Validated(JiraStubIssue.Create.class) JiraStubIssue request) {
         long id = idCounter.getAndIncrement();
-        String response = String.format("{\"id\":\"%d\",\"key\":\"TEST-%d\",\"self\":\"http://localhost/rest/api/2/issue/%d\"", id, id, id);
-        String issue = response + ",\"parsed_request\":" + request + "}";
+        String response = String.format("{" +
+                "\"expand\":\"renderedFields,names,schema,operations,editmeta,changelog,versionedRepresentations\"," +
+                "\"id\":\"%d\",\"key\":\"TEST-%d\",\"self\":\"http://localhost/rest/api/2/issue/%d\"", id, id, id);
+        String issue = response + "," + request + "}";
         issues.put(id, issue);
         return ResponseEntity.status(HttpStatus.CREATED).headers(localHeaders).body(response + "}");
     }
@@ -36,7 +40,7 @@ public class JiraStubController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editIssue(@PathVariable Long id, @RequestBody @Validated(JiraStubDTO.Update.class) JiraStubDTO request) {
+    public ResponseEntity<?> editIssue(@PathVariable Long id, @RequestBody @Validated(JiraStubIssue.Update.class) JiraStubIssue request) {
         if (issues.containsKey(id)) return ResponseEntity.noContent().headers(localHeaders).build();
         return ResponseEntity.notFound().build();
     }

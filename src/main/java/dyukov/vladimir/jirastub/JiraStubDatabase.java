@@ -8,22 +8,25 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class JiraStubDatabase {
-    private final Map<Long, JiraStubIssue> issues = new ConcurrentHashMap<>();
+    private final Map<String, JiraStubIssue> issues = new ConcurrentHashMap<>();
     private final AtomicLong idCounter = new AtomicLong(1);
 
     public JiraStubIssue insert(JiraStubIssue issue) {
-        Long id = idCounter.getAndIncrement();
-        issue.update(id.toString());
-        issues.put(id, issue);
+        long id = idCounter.getAndIncrement();
+        issue.update(Long.toString(id));
+        issues.put(Long.toString(id), issue);
         return issue;
     }
 
-    public JiraStubIssue obtain(Long id) {
+    public JiraStubIssue obtain(String id) {
+        if (id.contains("TEST-")) id = id.substring(5);
         return issues.get(id);
     }
 
-    public boolean update(Long id, JiraStubIssue issue) {
+    public boolean update(String id, JiraStubIssue issue) {
+        if (id.contains("TEST-")) id = id.substring(5);
         if (!issues.containsKey(id)) return false;
+
         JiraStubFields fields = issues.get(id).getFields(), new_fields = issue.getFields();
 
         if (new_fields.getSummary() != null) fields.setSummary(new_fields.getSummary());
@@ -37,7 +40,8 @@ public class JiraStubDatabase {
         return true;
     }
 
-    public boolean delete(Long id) {
+    public boolean delete(String id) {
+        if (id.contains("TEST-")) id = id.substring(5);
         return issues.remove(id) != null;
     }
 }

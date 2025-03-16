@@ -25,20 +25,20 @@ public class JiraStubController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<String> getIssue(@PathVariable Long id) {
+    public ResponseEntity<String> getIssue(@PathVariable String id) {
         JiraStubIssue issue = database.obtain(id);
         if (issue != null) return ResponseEntity.status(HttpStatus.OK).headers(localHeaders).body(issue.toString());
         return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editIssue(@PathVariable Long id, @RequestBody @Validated(JiraStubIssue.Update.class) JiraStubIssue request) {
+    public ResponseEntity<?> editIssue(@PathVariable String id, @RequestBody @Validated(JiraStubIssue.Update.class) JiraStubIssue request) {
         if (database.update(id, request)) return ResponseEntity.noContent().headers(localHeaders).build();
         return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteIssue(@PathVariable Long id) {
+    public ResponseEntity<?> deleteIssue(@PathVariable String id) {
         if (database.delete(id)) return ResponseEntity.noContent().headers(localHeaders).build();
         return ResponseEntity.notFound().build();
     }

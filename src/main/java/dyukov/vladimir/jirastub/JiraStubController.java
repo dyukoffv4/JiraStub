@@ -17,25 +17,23 @@ import java.util.concurrent.atomic.AtomicLong;
 @RestController
 @RequestMapping("/rest/api/2/issue")
 public class JiraStubController {
-    private final Map<Long, String> issues = new HashMap<>();
+    private final Map<Long, JiraStubIssue> issues = new HashMap<>();
     private final AtomicLong idCounter = new AtomicLong(100000);
     private final HttpHeaders localHeaders = new JiraStubHeaders();
 
     @PostMapping
     public ResponseEntity<String> createIssue(@RequestBody @Validated(JiraStubIssue.Create.class) JiraStubIssue request) {
-        long id = idCounter.getAndIncrement();
-        String response = String.format("{" +
-                "\"expand\":\"renderedFields,names,schema,operations,editmeta,changelog,versionedRepresentations\"," +
-                "\"id\":\"%d\",\"key\":\"TEST-%d\",\"self\":\"http://localhost/rest/api/2/issue/%d\"", id, id, id);
-        String issue = response + "," + request + "}";
-        issues.put(id, issue);
-        return ResponseEntity.status(HttpStatus.CREATED).headers(localHeaders).body(response + "}");
+        Long id = idCounter.getAndIncrement();
+        request.update(id.toString());
+        issues.put(id, request);
+        String response = String.format("{\"expand\":\"%s\",\"id\":\"%s\",\"key\":\"%s\",\"self\":\"%s\"}",
+                request.getExpand(), request.getId(), request.getKey(), request.getSelf());
+        return ResponseEntity.status(HttpStatus.CREATED).headers(localHeaders).body(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<String> getIssue(@PathVariable Long id) {
-        String issue = issues.get(id);
-        if (issue != null) return ResponseEntity.status(HttpStatus.OK).headers(localHeaders).body(issue);
+        if (issues.containsKey(id)) return ResponseEntity.status(HttpStatus.OK).headers(localHeaders).body(issues.get(id).toString());
         return ResponseEntity.notFound().build();
     }
 
@@ -51,6 +49,7 @@ public class JiraStubController {
         return ResponseEntity.notFound().build();
     }
 
+    /// Обработка ошибок валидации в нужном формате
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> customErrorHandler(MethodArgumentNotValidException exception) {
         Map<String, String> errors = new HashMap<>();

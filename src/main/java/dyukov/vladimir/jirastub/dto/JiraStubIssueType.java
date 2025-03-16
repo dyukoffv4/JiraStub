@@ -11,8 +11,4 @@ public class JiraStubIssueType {
     @NotBlank(groups = {JiraStubIssue.Create.class, JiraStubIssue.Update.class}, message = "IssueType ID should be Real")
     @Pattern(regexp = "10000|10001|10100|10102", groups = {JiraStubIssue.Create.class, JiraStubIssue.Update.class}, message = "IssueType ID is wrong")
     private String id;
-
-    public String toString() {
-        return String.format("{\"id\":\"%s\"}", id);
-    }
 }

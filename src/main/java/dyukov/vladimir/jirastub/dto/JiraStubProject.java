@@ -8,14 +8,18 @@ public class JiraStubProject {
     private String id;
     private String key;
 
+    /// Проверяет наличие поля id. Если поле присутствует, пропускает проверку.
+    /// Если поле отсутствует, проверяет наличие поля key. Если поле отсутствует, выдает ошибку.
     @AssertTrue(groups = {JiraStubIssue.Create.class, JiraStubIssue.Update.class}, message = "Project ID or Key should be")
-    public boolean isMyWillSatisfied() {
+    private boolean isMyWillSatisfied() {
         if (id != null) return !id.isBlank();
         if (key != null) return !key.isBlank();
         return false;
     }
 
-    public String toString() {
-        return String.format("{\"id\":\"%s\",\"key\":\"%s\"}", id, key);
+    /// Обновление полей, вычесляемых системой
+    public void update() {
+        if (id != null) key = "PROJECT-" + id;
+        else id = Integer.toString(key.hashCode(), 6);
     }
 }

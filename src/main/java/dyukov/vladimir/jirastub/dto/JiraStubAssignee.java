@@ -6,6 +6,6 @@ import lombok.Data;
 
 @Data
 public class JiraStubAssignee {
-    @NotNull(groups = {JiraStubIssue.Create.class, JiraStubIssue.Update.class}, message = "Assignee Name should be")
+    @NotNull(groups = {JiraStubIssue.Create.class, JiraStubIssue.Update.class}, message = "\"assignee\": \"expected Object containing a 'name' property\"")
     private String name;
 }

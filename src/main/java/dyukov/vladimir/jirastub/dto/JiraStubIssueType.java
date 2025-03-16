@@ -7,8 +7,10 @@ import lombok.Data;
 
 @Data
 public class JiraStubIssueType {
-    @NotNull(groups = JiraStubIssue.Create.class, message = "IssueType ID should be")
-    @NotBlank(groups = {JiraStubIssue.Create.class, JiraStubIssue.Update.class}, message = "IssueType ID should be Real")
-    @Pattern(regexp = "10000|10001|10100|10102", groups = {JiraStubIssue.Create.class, JiraStubIssue.Update.class}, message = "IssueType ID is wrong")
+    @NotNull(groups = JiraStubIssue.Create.class, message = "\"issuetype\": \"issue type is required\"")
+    @NotBlank(groups = {JiraStubIssue.Create.class, JiraStubIssue.Update.class},
+            message = "\"issuetype\": \"valid issue type is required\"")
+    @Pattern(regexp = "10001|10100|10102", groups = {JiraStubIssue.Create.class, JiraStubIssue.Update.class},
+            message = "\"issuetype\": \"valid issue type is required\"")
     private String id;
 }

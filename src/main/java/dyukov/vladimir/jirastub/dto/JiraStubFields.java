@@ -18,21 +18,21 @@ public class JiraStubFields {
     @Valid private JiraStubAssignee assignee;
 
     // Обязательные поля
-    @NotNull(groups = JiraStubIssue.Create.class, message = "Summary should be")
-    @NotBlank(groups = {JiraStubIssue.Create.class, JiraStubIssue.Update.class}, message = "Summary should be Real")
+    @NotNull(groups = JiraStubIssue.Create.class, message = "\"summary\": \"Вы должны определить тему по запросу.\"")
+    @NotBlank(groups = {JiraStubIssue.Create.class, JiraStubIssue.Update.class}, message = "\"summary\": \"Вы должны определить тему по запросу.\"")
     private String summary;
 
-    @NotNull(groups = JiraStubIssue.Create.class, message = "Project should be")
+    @NotNull(groups = JiraStubIssue.Create.class, message = "\"project\": \"project is required\"")
     @Valid private JiraStubProject project;
 
-    @NotNull(groups = JiraStubIssue.Create.class, message = "IssueType should be")
+    @NotNull(groups = JiraStubIssue.Create.class, message = "\"issuetype\": \"issue type is required\"")
     @Valid private JiraStubIssueType issuetype;
 
     /// Обновление полей, вычесляемых системой
     public void update() {
         if (labels == null) labels = new ArrayList<>();
         if (assignee != null && assignee.getName().isBlank()) assignee = null;
-        priority.update();
-        project.update();
+        if (priority != null) priority.update();
+        if (priority != null) project.update();
     }
 }

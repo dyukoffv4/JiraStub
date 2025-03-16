@@ -19,9 +19,8 @@ public class JiraStubIssue {
     private String self;
 
     // Обязательные поля
-    @NotNull(groups = {Create.class, Update.class}, message = "Fields should be")
-    @Valid
-    private JiraStubFields fields;
+    @NotNull(groups = {Create.class, Update.class}, message = "Внутренняя ошибка сервера")
+    @Valid private JiraStubFields fields;
 
     // Интрефейсы для разграничения валидации по типу запроса
     public interface Create {}

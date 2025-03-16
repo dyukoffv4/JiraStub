@@ -14,7 +14,7 @@ public class JiraStubPriority {
     /// Проверяет наличие поля id. Если поле присутствует, пропускает проверку.
     /// Если поле отсутствует, проверяет наличие поля key. Если поле отсутствует, выдает ошибку.
     /// Каждое поле проверяется на соответствие значениям из списков.
-    @AssertTrue(groups = {JiraStubIssue.Create.class, JiraStubIssue.Update.class}, message = "Project ID or Name should be")
+    @AssertTrue(groups = {JiraStubIssue.Create.class, JiraStubIssue.Update.class}, message = "\"priority\": \"Выбранный приоритет недействителен.\"")
     private boolean isMyWillSatisfied() {
         if (id != null) return !id.isBlank() && JiraStubSettings.priority_ids.contains(id);
         if (name != null) return !name.isBlank() && JiraStubSettings.priority_names.contains(name);

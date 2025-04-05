@@ -39,7 +39,6 @@ public class JiraStubIssue {
     /// Создание тестового Issue
     public static JiraStubIssue getTestIssue(String id_or_key) {
         String id = id_or_key.contains("-") ? id_or_key.substring(id_or_key.lastIndexOf("-")) : id_or_key;
-        try { Long.parseLong(id); } catch (NumberFormatException e) { return null; }
 
         JiraStubFields fields = new JiraStubFields();
         fields.setSummary("JIRA STUB SUMMARY");

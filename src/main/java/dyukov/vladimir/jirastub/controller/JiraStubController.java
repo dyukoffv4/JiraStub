@@ -23,21 +23,18 @@ public class JiraStubController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getIssue(@PathVariable String id) {
         JiraStubIssue issue = JiraStubIssue.getTestIssue(id);
-        if (issue == null) return ResponseEntity.notFound().build();
         try { Thread.sleep(50); } catch (InterruptedException e) { System.err.println(e.toString()); }
         return ResponseEntity.status(HttpStatus.OK).body(issue.toString());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateIssue(@PathVariable String id, @RequestBody @Validated(JiraStubIssue.Update.class) JiraStubIssue request) {
-        if (isInvalidID(id)) return ResponseEntity.notFound().build();
         try { Thread.sleep(50); } catch (InterruptedException e) { System.err.println(e.toString()); }
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteIssue(@PathVariable String id) {
-        if (isInvalidID(id)) return ResponseEntity.notFound().build();
         try { Thread.sleep(50); } catch (InterruptedException e) { System.err.println(e.toString()); }
         return ResponseEntity.noContent().build();
     }
@@ -58,11 +55,5 @@ public class JiraStubController {
         String key = "TEST-" + id;
         String self = "http://localhost/rest/api/2/issue/" + id;
         return String.format("{\"expand\":\"%s\",\"id\":\"%s\",\"key\":\"%s\",\"self\":\"%s\"}", expand, id, key, self);
-    }
-
-    private static boolean isInvalidID(String id) {
-        if (id.contains("-")) id = id.substring(id.lastIndexOf("-"));
-        try { Long.parseLong(id); } catch (NumberFormatException e) { return true; }
-        return false;
     }
 }

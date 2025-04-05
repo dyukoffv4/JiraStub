@@ -4,10 +4,8 @@ import dyukov.vladimir.jirastub.dto.JiraStubIssue;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.validation.annotation.Validated;
 import org.springframework.validation.ObjectError;
-
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,11 +16,8 @@ public class JiraStubController {
     @PostMapping
     public ResponseEntity<?> createIssue(@RequestBody @Validated(JiraStubIssue.Create.class) JiraStubIssue request) {
         String id = Long.toString((long) (Math.random() * 1000));
-        request.setId(id);
-        request.setKey("TEST-" + id);
-        request.setSelf("http://localhost/rest/api/2/issue/" + id);
         try { Thread.sleep(50); } catch (InterruptedException e) { System.err.println(e.toString()); }
-        return ResponseEntity.status(HttpStatus.CREATED).body(request.toShortString());
+        return ResponseEntity.status(HttpStatus.CREATED).body(getShortResponse(id));
     }
 
     @GetMapping("/{id}")
@@ -47,9 +42,8 @@ public class JiraStubController {
         return ResponseEntity.noContent().build();
     }
 
-    /// Обработка ошибок валидации в нужном формате
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> customErrorHandler(MethodArgumentNotValidException exception) {
+    public ResponseEntity<?> errorHandler(MethodArgumentNotValidException exception) {
         StringBuilder errors = new StringBuilder();
         for (ObjectError error : exception.getAllErrors()) {
             if (errors.isEmpty()) errors.append(error.getDefaultMessage());
@@ -59,8 +53,14 @@ public class JiraStubController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
-    /// Проверка корректности ID
-    public static boolean isInvalidID(String id) {
+    private static String getShortResponse(String id) {
+        String expand = "renderedFields,names,schema,operations,editmeta,changelog,versionedRepresentations";
+        String key = "TEST-" + id;
+        String self = "http://localhost/rest/api/2/issue/" + id;
+        return String.format("{\"expand\":\"%s\",\"id\":\"%s\",\"key\":\"%s\",\"self\":\"%s\"}", expand, id, key, self);
+    }
+
+    private static boolean isInvalidID(String id) {
         if (id.contains("-")) id = id.substring(id.lastIndexOf("-"));
         try { Long.parseLong(id); } catch (NumberFormatException e) { return true; }
         return false;

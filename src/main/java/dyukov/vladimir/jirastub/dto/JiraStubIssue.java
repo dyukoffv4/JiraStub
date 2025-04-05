@@ -26,11 +26,6 @@ public class JiraStubIssue {
     public interface Create {}
     public interface Update {}
 
-    /// Вывод мета информации объекта в формате JSON
-    public String toShortString() {
-        return String.format("{\"expand\":\"%s\",\"id\":\"%s\",\"key\":\"%s\",\"self\":\"%s\"}", expand, id, key, self);
-    }
-
     /// Вывод объекта в формате JSON
     public String toString() {
         try {
@@ -41,7 +36,7 @@ public class JiraStubIssue {
         }
     }
 
-    /// Получение тестового Issue
+    /// Создание тестового Issue
     public static JiraStubIssue getTestIssue(String id_or_key) {
         String id = id_or_key.contains("-") ? id_or_key.substring(id_or_key.lastIndexOf("-")) : id_or_key;
         try { Long.parseLong(id); } catch (NumberFormatException e) { return null; }

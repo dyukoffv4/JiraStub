@@ -27,12 +27,4 @@ public class JiraStubFields {
 
     @NotNull(groups = JiraStubIssue.Create.class, message = "\"issuetype\": \"issue type is required\"")
     @Valid private JiraStubIssueType issuetype;
-
-    /// Обновление полей, вычесляемых системой
-    public void update() {
-        if (labels == null) labels = new ArrayList<>();
-        if (assignee != null && assignee.getName().isBlank()) assignee = null;
-        if (priority != null) priority.update();
-        if (priority != null) project.update();
-    }
 }

@@ -26,12 +26,9 @@ public class JiraStubIssue {
     public interface Create {}
     public interface Update {}
 
-    /// Обновление полей, вычесляемых системой
-    public void update(String id) {
-        this.id = id;
-        key = "TEST-" + id;
-        self = "http://localhost/rest/api/2/issue/" + id;
-        fields.update();
+    /// Вывод мета информации объекта в формате JSON
+    public String toShortString() {
+        return String.format("{\"expand\":\"%s\",\"id\":\"%s\",\"key\":\"%s\",\"self\":\"%s\"}", expand, id, key, self);
     }
 
     /// Вывод объекта в формате JSON
@@ -42,5 +39,32 @@ public class JiraStubIssue {
         } catch (JsonProcessingException e) {
             return "Something went real wrong :(";
         }
+    }
+
+    /// Получение тестового Issue
+    public static JiraStubIssue getTestIssue(String id_or_key) {
+        String id = id_or_key.contains("-") ? id_or_key.substring(id_or_key.lastIndexOf("-")) : id_or_key;
+        try { Long.parseLong(id); } catch (NumberFormatException e) { return null; }
+
+        JiraStubFields fields = new JiraStubFields();
+        fields.setSummary("JIRA STUB SUMMARY");
+        fields.setDescription("JIRA STUB DESCRIPTION");
+
+        JiraStubIssueType issueType = new JiraStubIssueType();
+        issueType.setId("10001");
+        fields.setIssuetype(issueType);
+
+        JiraStubProject project = new JiraStubProject();
+        project.setId("12345");
+        project.setKey("TEST");
+        fields.setProject(project);
+
+        JiraStubIssue issue = new JiraStubIssue();
+        issue.id = id;
+        issue.key = id.equals(id_or_key) ? "TEST-" + id : id_or_key;
+        issue.self = "http://localhost/rest/api/2/issue/" + id;
+        issue.fields = fields;
+
+        return issue;
     }
 }

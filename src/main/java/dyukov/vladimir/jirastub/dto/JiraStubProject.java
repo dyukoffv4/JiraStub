@@ -16,10 +16,4 @@ public class JiraStubProject {
         if (key != null) return !key.isBlank();
         return false;
     }
-
-    /// Обновление полей, вычесляемых системой
-    public void update() {
-        if (id != null) key = "PROJECT-" + id;
-        else id = Integer.toString(key.hashCode(), 6);
-    }
 }

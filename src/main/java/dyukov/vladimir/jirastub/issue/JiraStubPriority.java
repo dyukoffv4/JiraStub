@@ -1,18 +1,15 @@
-package dyukov.vladimir.jirastub.dto;
+package dyukov.vladimir.jirastub.issue;
 
 import jakarta.validation.constraints.AssertTrue;
 
-import lombok.Data;
-
 import java.util.List;
 
-@Data
 public class JiraStubPriority {
     public static final List<String> priority_ids = List.of("1", "2", "3", "4", "5");
     public static final List<String> priority_names = List.of("Highest", "High", "Medium", "Low", "Lowest");
 
-    private String id;
-    private String name;
+    public String id;
+    public String name;
 
     /// Проверяет наличие поля id. Если поле присутствует, пропускает проверку.
     /// Если поле отсутствует, проверяет наличие поля key. Если поле отсутствует, выдает ошибку.

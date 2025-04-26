@@ -1,12 +1,10 @@
-package dyukov.vladimir.jirastub.dto;
+package dyukov.vladimir.jirastub.issue;
 
 import jakarta.validation.constraints.AssertTrue;
-import lombok.Data;
 
-@Data
 public class JiraStubProject {
-    private String id;
-    private String key;
+    public String id;
+    public String key;
 
     /// Проверяет наличие поля id. Если поле присутствует, пропускает проверку.
     /// Если поле отсутствует, проверяет наличие поля key. Если поле отсутствует, выдает ошибку.

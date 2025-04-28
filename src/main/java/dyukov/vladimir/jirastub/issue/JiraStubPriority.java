@@ -1,7 +1,7 @@
 package dyukov.vladimir.jirastub.issue;
 
+import dyukov.vladimir.jirastub.issue.group.*;
 import jakarta.validation.constraints.AssertTrue;
-
 import java.util.List;
 
 public class JiraStubPriority {
@@ -11,11 +11,9 @@ public class JiraStubPriority {
     public String id;
     public String name;
 
-    /// Проверяет наличие поля id. Если поле присутствует, пропускает проверку.
-    /// Если поле отсутствует, проверяет наличие поля key. Если поле отсутствует, выдает ошибку.
-    /// Каждое поле проверяется на соответствие значениям из списков.
-    @AssertTrue(groups = {JiraStubIssue.Create.class, JiraStubIssue.Update.class}, message = "\"priority\": \"Выбранный приоритет недействителен.\"")
-    private boolean isMyWillSatisfied() {
+    // Специальные валидаторы (всегда не пусто, соответствует списку)
+    @AssertTrue(groups = Merged.class, message = "\"priority\": \"Выбранный приоритет недействителен.\"")
+    private boolean isParamsCorrect() {
         if (id != null) return !id.isBlank() && priority_ids.contains(id);
         if (name != null) return !name.isBlank() && priority_names.contains(name);
         return false;

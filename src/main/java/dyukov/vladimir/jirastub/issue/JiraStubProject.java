@@ -1,17 +1,15 @@
 package dyukov.vladimir.jirastub.issue;
 
-import jakarta.validation.constraints.AssertTrue;
+import dyukov.vladimir.jirastub.issue.group.*;
+import jakarta.validation.constraints.AssertFalse;
 
 public class JiraStubProject {
     public String id;
     public String key;
 
-    /// Проверяет наличие поля id. Если поле присутствует, пропускает проверку.
-    /// Если поле отсутствует, проверяет наличие поля key. Если поле отсутствует, выдает ошибку.
-    @AssertTrue(groups = {JiraStubIssue.Create.class, JiraStubIssue.Update.class}, message = "\"project\": \"project is required\"")
-    private boolean isMyWillSatisfied() {
-        if (id != null) return !id.isBlank();
-        if (key != null) return !key.isBlank();
-        return false;
+    // Специальные валидаторы (всегда не пусто что-то одно)
+    @AssertFalse(groups = Merged.class, message = "\"project\": \"project is required\"")
+    private boolean isParamsNotCorrect() {
+        return (id == null) ? ((key == null) || key.isBlank()) : id.isBlank();
     }
 }

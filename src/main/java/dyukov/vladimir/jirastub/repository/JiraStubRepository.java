@@ -1,10 +1,10 @@
 package dyukov.vladimir.jirastub.repository;
 
+import dyukov.vladimir.jirastub.issue.JiraStubIssue;
+import dyukov.vladimir.jirastub.issue.JiraStubPriority;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import dyukov.vladimir.jirastub.issue.JiraStubIssue;
-
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -17,7 +17,19 @@ public class JiraStubRepository {
         String id = Long.toString(idCounter.getAndIncrement());
         issue.updateId(id);
 
-        // updater
+        if (issue.fields.assignee != null && issue.fields.assignee.name.isBlank()) issue.fields.assignee = null;
+        if (issue.fields.labels == null) issue.fields.labels = new ArrayList<>();
+
+        if (issue.fields.priority != null) {
+            if (issue.fields.priority.id != null) {
+                issue.fields.priority.name = JiraStubPriority.priority_names.get(JiraStubPriority.priority_ids.indexOf(issue.fields.priority.id));
+            } else {
+                issue.fields.priority.id = JiraStubPriority.priority_ids.get(JiraStubPriority.priority_names.indexOf(issue.fields.priority.name));
+            }
+        }
+
+        if (issue.fields.project.id != null) { if (issue.fields.project.key == null) issue.fields.project.key = "PROJECT-" + issue.fields.project.id; }
+        else issue.fields.project.id = Integer.toString(issue.fields.project.key.hashCode(), 6);
 
         issues.put(id, issue);
         return issue.toString();

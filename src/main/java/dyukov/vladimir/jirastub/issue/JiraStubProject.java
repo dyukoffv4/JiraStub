@@ -12,4 +12,14 @@ public class JiraStubProject {
     private boolean isParamsNotCorrect() {
         return (id == null) ? ((key == null) || key.isBlank()) : id.isBlank();
     }
+
+    // Дополнительный функционал
+    public void update(JiraStubProject new_project) {
+        if (new_project != null) {
+            id = new_project.id;
+            key = new_project.key;
+        }
+        if (id != null && key == null) key = "PROJECT-" + id;
+        if (id == null) id = Integer.toString(key.hashCode(), 6);
+    }
 }

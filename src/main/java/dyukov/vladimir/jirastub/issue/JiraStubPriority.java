@@ -18,4 +18,14 @@ public class JiraStubPriority {
         if (name != null) return !name.isBlank() && priority_names.contains(name);
         return false;
     }
+
+    // Дополнительный функционал
+    public void update(JiraStubPriority new_priority) {
+        if (new_priority != null) {
+            id = new_priority.id;
+            name = new_priority.name;
+        }
+        if (id != null) name = JiraStubPriority.priority_names.get(JiraStubPriority.priority_ids.indexOf(id));
+        else id = JiraStubPriority.priority_ids.get(JiraStubPriority.priority_names.indexOf(name));
+    }
 }

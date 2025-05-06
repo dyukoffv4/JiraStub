@@ -17,12 +17,13 @@ public class JiraStubIssue {
     public JiraStubFields fields;
 
     // Дополнительный функционал
-    public void update(String new_id, JiraStubIssue new_issue) {
-        if (new_id != null) {
-            id = new_id;
-            key = "TEST-" + new_id;
-            self = "http://localhost/rest/api/2/issue/" + new_id;
-        }
+    public void setId(String new_id) {
+        id = new_id;
+        key = "TEST-" + new_id;
+        self = "http://localhost/rest/api/2/issue/" + new_id;
+    }
+
+    public void update(JiraStubIssue new_issue) {
         if (fields != null) fields.update(new_issue == null ? null : new_issue.fields);
     }
 

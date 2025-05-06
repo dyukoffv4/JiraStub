@@ -12,8 +12,11 @@ public class JiraStubFields {
     public String description;
     public List<String> labels;
 
-    @Valid public JiraStubPriority priority;
-    @Valid public JiraStubAssignee assignee;
+    @Valid
+    public JiraStubPriority priority;
+
+    @Valid
+    public JiraStubAssignee assignee;
 
     // Обязательные поля
     @NotNull(groups = Create.class, message = "\"summary\": \"Вы должны определить тему по запросу.\"")
